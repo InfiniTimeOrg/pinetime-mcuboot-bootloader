@@ -1,0 +1,46 @@
+@startuml
+start
+partition Custom {
+:Check button for 5s;
+note right
+  Display is updated to show when
+  //revert firmware// and //factory reset//
+  are taken into account
+end note
+if (Pushed >50% of the time) then (yes)
+  :Mark previous firmware \n(in secondary slot) __pending__.\nIt'll be swapped in primary\nafter reset;
+  #pink:Reset;
+  detach
+elseif (Pushed > 25% of the time) then (yes)
+  :Copy factory firmware in\nsecondary slot and\nmark it __pending__.\nIt'll be swapped in primary\nafter reset;
+  #pink:Reset;
+  detach
+else (not pushed)
+  partition MCUBoot {
+    :Inspect swap status region;
+    if (is an interrupted swap being resumed?) then (yes)
+      :Complete the partial swap operation;
+      :Boot into image in primary slot;
+      stop
+    else(no)
+    endif
+
+    :Inspect image trailers;
+    if(s a swap requested?) then(yes)
+      if(Is the requested image valid (integrity and security check)?) then (yes)
+      :Perform swap operation;
+      :Persist completion of swap procedure to image trailers;
+        else (no)
+          :Erase invalid image;
+          :Persist failure of swap procedure to image trailers;
+        endif
+      else(no)
+    endif
+
+    :Boot into image in primary slot;
+  }
+endif
+}
+
+stop
+@enduml

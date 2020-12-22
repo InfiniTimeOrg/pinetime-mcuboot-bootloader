@@ -1,0 +1,381 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            //  Build the Bootloader.
+            "label": "1️⃣ Build Bootloader",
+            "type": "shell",
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    " scripts\\nrf52\\build-boot.cmd && echo ✅ ◾ ️Done! "
+                ]
+            },
+            "osx": {
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " scripts/nrf52/build-boot.sh && echo ✅ ◾ ️Done! "
+                ],
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " scripts/nrf52/build-boot.sh && echo ✅ ◾ ️Done! "
+                ],
+            },
+            "presentation": {
+                "clear": true
+            }
+        },
+        {
+            //  Build the Application.
+            "label": "2️⃣ Build Application",
+            "type": "shell",
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    " scripts\\build-app.cmd && echo ✅ ◾ ️Done! "
+                ]
+            },
+            "osx": {
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " scripts/build-app.sh && cp .vscode/launch-nrf52.json .vscode/launch.json && echo ✅ ◾ ️Done! "
+                ],
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " scripts/build-app.sh && echo ✅ ◾ ️Done! "
+                ],
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": [ 
+                {
+                    //  Problem matcher for GNU Linker, e.g. /Users/Luppy/mynewt/stm32bluepill-mynewt-sensor/apps/my_sensor_app/src/ATParser.h:82: undefined reference to `operator delete[](void*)'
+                    "fileLocation": [ "absolute" ],
+                    "pattern": {
+                        "regexp": "^(/.*):(\\d+):\\s+(.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "message": 3,
+                        // "code": 3,
+                        // "severity": 4,
+                    }                    
+                }
+            ],
+            "presentation": {
+                "clear": true
+            }
+        },
+        {
+            //  Create the Application ROM Image.
+            "label": "3️⃣ Image Application",
+            "type": "shell",
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    " scripts\\nrf52\\image-app.cmd && echo ✅ ◾ ️Done! "
+                ]
+            },
+            "osx": {
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " scripts/nrf52/image-app.sh && echo ✅ ◾ ️Done! "
+                ],
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " scripts/nrf52/image-app.sh && echo ✅ ◾ ️Done! "
+                ],
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "clear": true
+            }
+        },
+        {
+            //  Flash the Bootloader.  We use custom scripts instead of "newt load" because "newt" runs in Ubuntu while the ST Link driver runs under Windows.
+            "label": "4️⃣ Flash Bootloader",
+            "type": "shell",
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    " scripts\\nrf52\\flash-boot.cmd && echo ✅ ◾ ️Done! "
+                ]
+            },
+            "osx": {
+                // Previously: " newt load -v bluepill_boot && echo '**** Done!' "
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " scripts/nrf52/flash-boot.sh && echo ✅ ◾ ️Done! "
+                ],
+            },
+            "linux": {
+                // Previously: " newt load -v bluepill_boot && echo '**** Done!' "
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " scripts/nrf52/flash-boot.sh && echo ✅ ◾ ️Done! "
+                ],
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "clear": true
+            }
+        },
+        {
+            //  Flash the Application.  We use custom scripts instead of "newt load" because "newt" runs in Ubuntu while the ST Link driver runs under Windows.
+            "label": "5️⃣ Flash Application",
+            "type": "shell",
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    " scripts\\nrf52\\flash-app.cmd && echo ✅ ◾ ️Done! "
+                ]
+            },
+            "osx": {
+                // Previously: " newt load -v bluepill_my_sensor && echo '**** Done!' "
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " scripts/nrf52/flash-app.sh && echo ✅ ◾ ️Done! "
+                ],
+            },
+            "linux": {
+                // Previously: " newt load -v bluepill_my_sensor && echo '**** Done!' "
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " scripts/nrf52/flash-app.sh && echo ✅ ◾ ️Done! "
+                ],
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "clear": true
+            }
+        },
+        {
+            //  Erase the Flash ROM
+            "label": "⚡️ Erase Flash",
+            "type": "shell",
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    " scripts\\nrf52\\flash-erase.cmd && echo ✅ ◾ ️Done! "
+                ]
+            },
+            "osx": {
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " scripts/nrf52/flash-erase.sh && echo ✅ ◾ ️Done! "
+                ],
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " scripts/nrf52/flash-erase.sh && echo ✅ ◾ ️Done! "
+                ],
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "clear": true
+            }
+        },
+        {
+            //  Generate Rust bindings for C libraries.
+            "label": "⛓ Generate Rust Bindings",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c", "-l",
+                " set -e -x ; ./scripts/gen-bindings.sh ; ./scripts/gen-bindings-lvgl.sh ; echo ✅ ◾ ️Done! "
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "clear": true
+            }
+        },
+        {
+            //  Build Rust library with macros expanded, output to logs/libmylib-expanded.rs.
+            "label": "👓 Expand Rust Macros",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c", "-l",
+                " set -e -x ; ./scripts/build-rustlib.sh ; echo ✅ ◾ ️Done! "
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "clear": true
+            }
+        },
+        {
+            //  Generate documentation.
+            "label": "📖 Generate Doc",
+            "type": "shell",
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    " cargo doc --document-private-items && echo ✅ ◾ ️Done! target/thumbv7m-none-eabi/doc "
+                ]
+            },
+            "osx": {
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " article=handdrawn ; set -e -x ; cat scripts/articles/$article-header.html scripts/rustdoc-header.html >article-rustdoc-header.html ; rustdoc --output docs/articles --html-in-header article-rustdoc-header.html --html-before-content scripts/rustdoc-before.html rust/app/src/$article.md ; cargo doc --document-private-items ; echo ✅ ◾ ️Done! target/thumbv7m-none-eabi/doc "
+                ]
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " set -e -x ; cargo doc --document-private-items ; echo ✅ ◾ ️Done! target/thumbv7m-none-eabi/doc "
+                ]
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "clear": true
+            }
+        },
+        {
+            //  Remove all compiled files.
+            "label": "🗑 Clean",
+            "type": "shell",
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    " newt\\newt.exe clean -v all && rd /q /s target && echo ✅ ◾ ️Done!"
+                ]
+            },
+            "osx": {
+                // Previously: " newt load -v bluepill_my_sensor && echo '**** Done!' "
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " newt clean -v all && rm -r target ; echo ✅ ◾ ️Done! "
+                ],
+            },
+            "linux": {
+                // Previously: " newt load -v bluepill_my_sensor && echo '**** Done!' "
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " newt clean -v all && rm -r target ; echo ✅ ◾ ️Done! "
+                ],
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "clear": true
+            }
+        },
+        {
+            //  Install Mynewt source, build tools, sample.
+            "label": "Install Mynewt",
+            "type": "shell",
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    " echo Done! Please restart Visual Studio Code to activate the extensions"
+                ]
+            },
+            "osx": {
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " scripts/install-mac.sh "
+                ]
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " scripts/install-linux.sh "
+                ]
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "clear": true
+            }
+        },
+        {
+            //  Prompt the user to restart.
+            "label": "Prompt Restart",
+            "type": "shell",
+            "windows": {
+                "command": "cmd",
+                "args": [
+                    "/c",
+                    " echo Done! Please restart Visual Studio Code to activate the extensions "
+                ]
+            },
+            "osx": {
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " echo Done! Please restart Visual Studio Code to activate the extensions "
+                ]
+            },
+            "linux": {
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " echo Done! Please restart Visual Studio Code to activate the extensions "
+                ]
+            },
+            "problemMatcher": [],
+            "presentation": {
+                "clear": true
+            }
+        },
+        /*  For debug we now use the Cortex Debug Extension.
+        {
+            "label": "💣 Debug bluepill_my_sensor",
+            "type": "shell",
+            "windows": {
+                "command": "bash",
+                "args": [
+                    "-c", "-l",
+                    " newt debug -v bluepill_my_sensor ",
+                    //  "-n",
+                ]
+            },
+            "osx": {
+                "command": 
+                " newt debug -v bluepill_my_sensor "
+            },
+            "linux": {
+                "command": 
+                " newt debug -v bluepill_my_sensor "
+            },
+            "problemMatcher": [
+            ]
+        },
+        */
+    ]
+}
