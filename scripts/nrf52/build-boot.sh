@@ -13,6 +13,12 @@ newt build nrf52_boot
 #  Show the size.
 newt size -v nrf52_boot
 
-#  Copy the disassembler and linker map to the logs folder. For Stub Bootloader, select "bin/targets/nrf52_boot/app/apps/boot_stub/boot_stub.elf.*"
-cp bin/targets/nrf52_boot/app/boot/mynewt/mynewt.elf.lst logs
-cp bin/targets/nrf52_boot/app/boot/mynewt/mynewt.elf.map logs
+arm-none-eabi-objcopy -I binary -O ihex bin/targets/nrf52_boot/app/@mcuboot/boot/mynewt/mynewt.elf.bin bin/targets/nrf52_boot/app/@mcuboot/boot/mynewt/mynewt.elf.hex
+scripts/hex2c.py bin/targets/nrf52_boot/app/@mcuboot/boot/mynewt/mynewt.elf.hex > reloader/src/boards/pinetime/bootloader.h
+make -C reloader BOARD=pinetime
+
+set +x
+echo "Bootloader firmware (elf) : bin/targets/nrf52_boot/app/@mcuboot/boot/mynewt/mynewt.elf"
+echo "Bootloader firmware (bin) : bin/targets/nrf52_boot/app/@mcuboot/boot/mynewt/mynewt.bin"
+echo "Bootloader firmware (hex) : bin/targets/nrf52_boot/app/@mcuboot/boot/mynewt/mynewt.hex"
+echo "Reloader (DFU) : reloader/build-pinetime/reloader-mcuboot.zip"

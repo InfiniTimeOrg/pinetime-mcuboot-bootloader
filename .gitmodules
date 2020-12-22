@@ -1,0 +1,3 @@
+[submodule "reloader"]
+	path = reloader
+	url = git@github.com:daniel-thompson/wasp-reloader.git

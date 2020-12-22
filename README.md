@@ -68,8 +68,9 @@ The goal of this firmware is to provide a mean for the user to OTA a new firmwar
 
 - Install `newt` tool
 - Clone the project and `cd` into it
+- Init and update submodules : `git submodule update --init --recursive`
 - Configure mynewt : `newt upgrade`
-- Build : `scripts/nrf52/build-boot.sh`. The firmware is generated in `bin/targets/nrf52_boot/app/@mcuboot/boot/mynewt/mynewt.elf`
+- Build : `scripts/nrf52/build-boot.sh`. The firmware is generated in `bin/targets/nrf52_boot/app/@mcuboot/boot/mynewt/mynewt.elf` and the DFU file for the reloader : `reloader/build-pinetime/reloader-mcuboot.zip`
 
 ## About the code
 
