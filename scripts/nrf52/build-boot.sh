@@ -4,6 +4,8 @@
 set -e  #  Exit when any command fails.
 set -x  #  Echo all commands.
 
+source paths.bash
+
 #  Show the Arm Toolchain version.
 arm-none-eabi-gcc --version
 
