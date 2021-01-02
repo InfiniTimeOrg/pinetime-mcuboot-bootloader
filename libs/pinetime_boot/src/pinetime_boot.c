@@ -74,16 +74,16 @@ void pinetime_boot_init(void) {
         }
 
         if(i % 8 == 0) {
-          uint16_t color = 0xF800;
+          uint16_t color = RED;
           if (button_samples < 3000 * 64 * 2) {
-            color = 0x07E0;
+            color = GREEN;
           } else if (button_samples < 3000 * 64 * 4) {
-            color = 0x001F;
+            color = BLUE;
           } else {
-            color = 0xF800;
+            color = RED;
           }
 
-          pinetime_boot_display_image_colors(0xffff, color, 240 - ((i / 8) * 6) + 1);
+          pinetime_boot_display_image_colors(WHITE, color, 240 - ((i / 8) * 6) + 1);
         }
     }
     console_printf("Waited 5 seconds (%d)\n", (int)button_samples);  console_flush();
@@ -109,6 +109,7 @@ void pinetime_boot_init(void) {
     }
 }
 
+/// Configure and start the watchdog
 void setup_watchdog() {
   NRF_WDT->CONFIG &= ~(WDT_CONFIG_SLEEP_Msk << WDT_CONFIG_SLEEP_Pos);
   NRF_WDT->CONFIG |= (WDT_CONFIG_HALT_Run << WDT_CONFIG_SLEEP_Pos);

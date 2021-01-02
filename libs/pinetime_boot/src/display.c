@@ -46,7 +46,7 @@
 
 //  ST7789 Colour Settings
 #define INVERTED 1  //  Display colours are inverted
-#define RGB      1  //  Display colours are RGB    
+#define RGB      1  //  Display colours are RGB
 
 //  Flash Device for Image
 #define FLASH_DEVICE 1  //  0 for Internal Flash ROM, 1 for External SPI Flash
@@ -105,42 +105,44 @@ static int write_data(const uint8_t *data, uint16_t len);
 static int transmit_spi(const uint8_t *data, uint16_t len);
 
 /// Buffer for reading flash and writing to display
-static uint8_t flash_buffer[240*2];
+static uint8_t flash_buffer[COL_COUNT * BYTES_PER_PIXEL];
 
-int pinetime_display_image_colors(struct imgInfo* info, int posx, int posy, uint16_t color1, uint16_t color2, uint8_t colorLine) {
+/// Display the image described by info to the ST7789 display controller using 2 colors. The first x lines (x = colorLine)
+/// will be drawn in color1, the rest in color2.
+int pinetime_display_image_colors(struct imgInfo* info, int posX, int posY, uint16_t color1, uint16_t color2, uint8_t colorLine) {
   int rc;
   int y = 0;
-  uint16_t bp = 0;
-  uint16_t fg = 0xffff;
-  const uint16_t bg = 0;
-  uint16_t color = bg;
-  uint16_t trueColor = color;
-  for (int i=0; i<info->dataSize; i++) {
-    uint8_t rl = info->data[i];
-    while (rl) {
-      flash_buffer[bp] = trueColor >> 8;
-      flash_buffer[bp + 1] = trueColor & 0xff;
-      bp += 2;
-      rl -= 1;
+  uint16_t bufferIndex = 0;
+  uint8_t isBackground = 1;
+  const uint16_t backgroundColor = BLACK;
+  uint16_t trueColor = backgroundColor;
 
-      if (bp >= (info->width*2)) {
-        rc = set_window(posx, y+posy, posx+info->width-1, y+posy); assert(rc == 0);
+  for (int i = 0; i < info->dataSize; i++) {
+    uint8_t runLength = info->data[i];
+    while (runLength) {
+      flash_buffer[bufferIndex] = trueColor >> 8;
+      flash_buffer[bufferIndex + 1] = trueColor & 0xff;
+      bufferIndex += BYTES_PER_PIXEL;
+      runLength -= 1;
+
+      if (bufferIndex >= (info->width * BYTES_PER_PIXEL)) {
+        rc = set_window(posX, y + posY, posX + info->width - 1, y + posY); assert(rc == 0);
 
         //  Write Pixels (RAMWR): st7735_lcd::draw() → set_pixel()
         rc = write_command(RAMWR, NULL, 0); assert(rc == 0);
-        rc = write_data(flash_buffer, info->width*2); assert(rc == 0);
-        bp = 0;
+        rc = write_data(flash_buffer, info->width * BYTES_PER_PIXEL); assert(rc == 0);
+        bufferIndex = 0;
         y += 1;
       }
     }
 
-    if (color == bg) {
-      color = fg;
+    if (isBackground) {
+      isBackground = 0;
       trueColor = (y < colorLine) ? color1 : color2;
     }
     else {
-      color = bg;
-      trueColor = color;
+      isBackground = 1;
+      trueColor = backgroundColor;
     }
     if(y >= info->height)
       break;
@@ -148,24 +150,25 @@ int pinetime_display_image_colors(struct imgInfo* info, int posx, int posy, uint
   return 0;
 }
 
+/// Clear the display
 void pinetime_clear_screen(void) {
   int rc = 0;
-  for(int i = 0 ; i < 240*2; i++) {
+  for(int i = 0 ; i < COL_COUNT * BYTES_PER_PIXEL; i++) {
     flash_buffer[i] = 0;
   }
-  for(int i = 0; i < 240; i++) {
-    rc = set_window(0, i, 239, i); assert(rc == 0);
+  for(int i = 0; i < ROW_COUNT; i++) {
+    rc = set_window(0, i, COL_COUNT-1, i); assert(rc == 0);
     rc = write_command(RAMWR, NULL, 0); assert(rc == 0);
-    rc = write_data(flash_buffer, 240*2); assert(rc == 0);
+    rc = write_data(flash_buffer, COL_COUNT * BYTES_PER_PIXEL); assert(rc == 0);
   }
 }
 
-int pinetime_display_image(struct imgInfo* info, int posx, int posy) {
-  return pinetime_display_image_colors(info, posx, posy, 0xffff, 0xffff, 0);
+/// Display the image described by info at position (posX, posY) using default color (black and white)
+int pinetime_display_image(struct imgInfo* info, int posX, int posY) {
+  return pinetime_display_image_colors(info, posX, posY, WHITE, WHITE, 0);
 }
 
-/// Display the image in SPI Flash to ST7789 display controller. 
-/// Derived from https://github.com/lupyuen/pinetime-rust-mynewt/blob/main/logs/spi-non-blocking.log
+/// Display the boot logo to ST7789 display controller
 int pinetime_boot_display_image(void) {
   console_printf("Displaying boot logo...\n");  console_flush();
 
@@ -175,14 +178,16 @@ int pinetime_boot_display_image(void) {
   return pinetime_display_image(&bootLogoInfo, 0, 0);
 }
 
+/// Display the boot logo to ST7789 display controller using 2 colors. The first x lines (x = colorLine)
+/// will be drawn in color1, the rest in color2.
 int pinetime_boot_display_image_colors(uint16_t color1, uint16_t color2, uint8_t colorLine) {
   return pinetime_display_image_colors(&bootLogoInfo, 0, 0, color1, color2, colorLine);
 }
 
-
+/// Display the bootloader version to ST7789 display controller on the bottom of the display (centered)
 int pinetime_version_image(void) {
   console_printf("Displaying version image...\n"); console_flush();
-  return pinetime_display_image(&versionInfo, 120 - (versionInfo.width/2), 240 - (versionInfo.height));
+  return pinetime_display_image(&versionInfo, (COL_COUNT/2) - (versionInfo.width/2), ROW_COUNT - (versionInfo.height));
 }
 
 /// Set the ST7789 display window to the coordinates (left, top), (right, bottom)
@@ -316,7 +321,7 @@ static int transmit_spi(const uint8_t *data, uint16_t len) {
     //  Select the device
     hal_gpio_write(DISPLAY_CS, 0);
     //  Send the data
-    int rc = hal_spi_txrx(DISPLAY_SPI, 
+    int rc = hal_spi_txrx(DISPLAY_SPI,
         (void *) data,  //  TX Buffer
         NULL,  //  RX Buffer (don't receive)
         len);  //  Length
