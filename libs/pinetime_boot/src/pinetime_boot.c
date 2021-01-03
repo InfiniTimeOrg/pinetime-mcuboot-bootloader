@@ -29,6 +29,7 @@
 #include "pinetime_boot/pinetime_boot.h"
 #include "pinetime_boot/pinetime_factory.h"
 #include "pinetime_boot/pinetime_delay.h"
+#include <hal/hal_watchdog.h>
 
 #define PUSH_BUTTON_IN  13  //  GPIO Pin P0.13: PUSH BUTTON_IN
 #define PUSH_BUTTON_OUT 15  //  GPIO Pin P0.15/TRACEDATA2: PUSH BUTTON_OUT
@@ -71,19 +72,20 @@ void pinetime_boot_init(void) {
         }
         if(i % 64 == 0) {
           console_printf("step %d - %d\n", (i / (64)) + 1, (int)button_samples); console_flush();
+          hal_watchdog_tickle();
         }
 
         if(i % 8 == 0) {
-          uint16_t color = 0xF800;
+          uint16_t color = RED;
           if (button_samples < 3000 * 64 * 2) {
-            color = 0x07E0;
+            color = GREEN;
           } else if (button_samples < 3000 * 64 * 4) {
-            color = 0x001F;
+            color = BLUE;
           } else {
-            color = 0xF800;
+            color = RED;
           }
 
-          pinetime_boot_display_image_colors(0xffff, color, 240 - ((i / 8) * 6) + 1);
+          pinetime_boot_display_image_colors(WHITE, color, 240 - ((i / 8) * 6) + 1);
         }
     }
     console_printf("Waited 5 seconds (%d)\n", (int)button_samples);  console_flush();
@@ -109,6 +111,7 @@ void pinetime_boot_init(void) {
     }
 }
 
+/// Configure and start the watchdog
 void setup_watchdog() {
   NRF_WDT->CONFIG &= ~(WDT_CONFIG_SLEEP_Msk << WDT_CONFIG_SLEEP_Pos);
   NRF_WDT->CONFIG |= (WDT_CONFIG_HALT_Run << WDT_CONFIG_SLEEP_Pos);
