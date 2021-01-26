@@ -30,6 +30,7 @@
 #include "pinetime_boot/pinetime_factory.h"
 #include "pinetime_boot/pinetime_delay.h"
 #include <hal/hal_watchdog.h>
+#include "pinetime_boot/version.h"
 
 #define PUSH_BUTTON_IN  13  //  GPIO Pin P0.13: PUSH BUTTON_IN
 #define PUSH_BUTTON_OUT 15  //  GPIO Pin P0.15/TRACEDATA2: PUSH BUTTON_OUT
@@ -49,6 +50,7 @@ static void relocate_vector_table(void *vector_table, void *relocated_vector_tab
 /// Init the display and render the boot graphic. Called by sysinit() during startup, defined in pkg.yml.
 void pinetime_boot_init(void) {
     console_printf("Starting Bootloader...\n");  console_flush();
+    pinetime_set_version();
 
     //  Init the push button. The button on the side of the PineTime is disabled by default. To enable it, drive the button out pin (P0.15) high.
     //  While enabled, the button in pin (P0.13) will be high when the button is pressed, and low when it is not pressed. 
