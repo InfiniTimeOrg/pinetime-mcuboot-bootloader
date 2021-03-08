@@ -20,6 +20,10 @@ Changes between the original repo and the "Initial commit" of this one can be se
 - Load and run a **recovery** firmware
 - Basic UI (logo, progress bar, button)
 
+## Update
+
+Please see [this page](docs/howToUpdate.md) for more info about the update procedure.
+
 ## Memory map
 
 ![Memory Map](docs/pictures/memoryMap.png "Memory map")
