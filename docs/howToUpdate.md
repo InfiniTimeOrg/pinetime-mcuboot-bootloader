@@ -29,7 +29,7 @@ That being said, we did many tests to ensure that this update goes as smoothly a
  - OTA `pinetime-mcuboot-recovery-loader-0.14.1.zip` from InfiniTime repo. This custom firmware will install the recovery firmware into the external flash memory and reset the watch when it's done.
  - The bootloader reverts to InfiniTime again and loads it.
 
-[**--> See it in video <--**](https://video.codingfield.com/videos/watch/55884aab-cdaf-43b0-8039-f03c41ac6d5d)
+[**--> See it in video <--**](https://video.codingfield.com/videos/watch/831077c5-16f3-47b4-9b2b-c4bbfecc6529)
 
 ## What changed in this version since the previous version?
 
