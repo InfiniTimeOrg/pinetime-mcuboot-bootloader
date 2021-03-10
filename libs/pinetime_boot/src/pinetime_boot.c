@@ -93,6 +93,10 @@ void pinetime_boot_init(void) {
     console_printf("Waited 5 seconds (%d)\n", (int)button_samples);  console_flush();
 
     //  Check whether button is pressed and held. Sample count must high enough to avoid accidental rollbacks.
+    if(button_samples == (3000 * 64 * 5)) {
+      console_printf("Button held for 5 seconds - ignoring\n");  console_flush();
+     }
+    
     if(button_samples > (3000 * 64 * 4)) {
       console_printf("Restoring factory firmware\n");  console_flush();
       restore_factory();
