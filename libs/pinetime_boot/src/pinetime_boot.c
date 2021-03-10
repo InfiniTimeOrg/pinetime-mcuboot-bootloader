@@ -97,7 +97,7 @@ void pinetime_boot_init(void) {
       console_printf("Button held for 5 seconds - ignoring\n");  console_flush();
      }
     
-    if(button_samples > (3000 * 64 * 4)) {
+    if(button_samples > (3000 * 64 * 4) && (button_samples < (3000 * 64 * 5)) {
       console_printf("Restoring factory firmware\n");  console_flush();
       restore_factory();
     }
