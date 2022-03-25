@@ -3,3 +3,12 @@
 #   Strings must be enclosed by '"..."'
 
 syscfg.defs:
+  PUSH_BUTTON_IN:
+      description: Pin of the pushbutton (in)
+      value: 
+      restrictions: $notnull
+
+  PUSH_BUTTON_OUT:
+      description: Pin of the pushbutton (out)
+      value: 
+      restrictions: $notnull
