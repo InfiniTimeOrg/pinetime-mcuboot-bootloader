@@ -37,7 +37,6 @@
 #define DISPLAY_RST  26  //  LCD_RESET (P0.26): Display reset
 #define DISPLAY_HIGH 23  //  LCD_BACKLIGHT_{LOW,MID,HIGH} (P0.14, 22, 23): Backlight (active low)
 #define BATCH_SIZE  256  //  Max number of SPI data bytes to be transmitted
-#define PUSH_BUTTON_IN  13  //  GPIO Pin P0.13: PUSH BUTTON_IN
 
 //  Screen Size
 #define ROW_COUNT 240

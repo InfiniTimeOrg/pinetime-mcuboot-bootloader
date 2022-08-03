@@ -32,9 +32,6 @@
 #include <hal/hal_watchdog.h>
 #include "pinetime_boot/version.h"
 
-#define PUSH_BUTTON_IN  13  //  GPIO Pin P0.13: PUSH BUTTON_IN
-#define PUSH_BUTTON_OUT 15  //  GPIO Pin P0.15/TRACEDATA2: PUSH BUTTON_OUT
-
 /// Vector Table will be relocated here.
 #define RELOCATED_VECTOR_TABLE 0x7F00
 
@@ -54,9 +51,9 @@ void pinetime_boot_init(void) {
 
     //  Init the push button. The button on the side of the PineTime is disabled by default. To enable it, drive the button out pin (P0.15) high.
     //  While enabled, the button in pin (P0.13) will be high when the button is pressed, and low when it is not pressed. 
-    hal_gpio_init_in(PUSH_BUTTON_IN, HAL_GPIO_PULL_DOWN);
-    hal_gpio_init_out(PUSH_BUTTON_OUT, 1);
-    hal_gpio_write(PUSH_BUTTON_OUT, 1);  //  Enable the button
+    hal_gpio_init_in(MYNEWT_VAL(PUSH_BUTTON_IN), HAL_GPIO_PULL_DOWN);
+    hal_gpio_init_out(MYNEWT_VAL(PUSH_BUTTON_OUT), 1);
+    hal_gpio_write(MYNEWT_VAL(PUSH_BUTTON_OUT), 1);  //  Enable the button
     //  blink_backlight(1, 1);
 
     //  Display the image.
@@ -70,7 +67,7 @@ void pinetime_boot_init(void) {
     console_printf("Waiting 5 seconds for button...\n");  console_flush();
     for (int i = 0; i < 64 * 5; i++) {
         for (int delay = 0; delay < 3000; delay++) {
-            button_samples += hal_gpio_read(PUSH_BUTTON_IN);
+            button_samples += hal_gpio_read(MYNEWT_VAL(PUSH_BUTTON_IN));
         }
         if(i % 64 == 0) {
           console_printf("step %d - %d\n", (i / (64)) + 1, (int)button_samples); console_flush();

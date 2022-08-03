@@ -16,8 +16,8 @@
 # specific language governing permissions and limitations
 # under the License.
 
-# MCUBoot Package Settings
-pkg.name:         targets/nrf52_boot
+# Target Settings
+pkg.name:         targets/pinetime
 pkg.type:         target
 pkg.description: 
 pkg.author: 

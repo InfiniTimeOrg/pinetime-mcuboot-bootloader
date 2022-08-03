@@ -21,8 +21,6 @@
 #include <os/mynewt.h>
 #include <hal/hal_gpio.h>
 
-#define PUSH_BUTTON_IN  13  //  GPIO Pin P0.13: PUSH BUTTON_IN
-
 /// GPIO settings for the backlight: LCD_BACKLIGHT_{LOW,MID,HIGH} (P0.14, 22, 23)
 static const uint8_t backlights[] = {    
     14,  //  Low Backlight
@@ -130,6 +128,6 @@ static void delay_ms(uint32_t ms) {
     uint8_t button_samples = 0;
     for (int i = 0; i < ms; i++) {
         for (int delay = 0; delay < 100000; delay++) {}
-        button_samples += hal_gpio_read(PUSH_BUTTON_IN);
+        button_samples += hal_gpio_read(MYNEWT_VAL(PUSH_BUTTON_IN));
     }
 }

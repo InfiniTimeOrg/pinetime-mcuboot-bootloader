@@ -70,7 +70,11 @@ The goal of this firmware is to provide a mean for the user to OTA a new firmwar
 - Clone the project and `cd` into it
 - Init and update submodules : `git submodule update --init --recursive`
 - Configure mynewt : `newt upgrade`
-- Build : `scripts/nrf52/build-boot.sh`. The firmware is generated in `bin/targets/nrf52_boot/app/@mcuboot/boot/mynewt/mynewt.elf` and the DFU file for the reloader : `reloader/build-pinetime/reloader-mcuboot.zip`
+- Build : `scripts/nrf52/build-boot.sh`. The firmware is generated in `bin/targets/pinetime/app/@mcuboot/boot/mynewt/mynewt.elf` and the DFU file for the reloader : `reloader/build-pinetime/reloader-mcuboot.zip`
+
+You can also build the firmware for the P8 watch, which has a slightly different pin mapping. The `build-boot.sh` accepts an optional argument (default: `pinetime`, options: `pinetime`, `p8`) to specify the target to build.
+
+- Build : `scripts/nrf52/build-boot.sh p8`. The firmware is generated in `bin/targets/p8/app/@mcuboot/boot/mynewt/mynewt.elf` and the DFU file for the reloader : `reloader/build-p8/reloader-mcuboot.zip`
 
 ## About the code
 
