@@ -13,12 +13,17 @@
 ![Memory Map](docs/pictures/memoryMap.png "Memory map")
 
 The PineTime is based on 2 flash memories:
- - **The internal flash** (512KB) : this flash is integrated into the MCU. The MCU runs the code from this memory. It cannot run codes directly from the external SPI flash memory. This internal memory contains the bootloader code as well as the application firmware. The scratch area is used by MCUBoot to swap firmwares from internal and external memories.
+ - **The internal flash** (512KB) : this flash is integrated into the MCU. The MCU runs the code from this memory. It cannot run codes directly from the external SPI flash memory. It contains the following sections:
+   - **Bootloader** (28KB - 0x7000B) : This bootloader.
+   - **Log** (4KB - 0x1000B) : Space reserved for boot/error logs. Not currently useed.
+   - **Application firmware** (464KB - 0x74000B) : application wrapped into a MCUBoot image (header, TLV, trailer).
+   - **Scrach** (4KB - 0x1000B) : the scratch area that allows MCUBoot to swap firmware between the internal and external memories.
+   - **Spare** (12KB - 0x3000B) : a spare and unused area.
  - **The external** flash (4MB) : this memory is external to the MCU and is connected to the MCU using an SPI bus. It contains the recovery firmware (in the section *Bootloader Assets*) and the secondary slot for MCUBoot (*OTA section*). The *FS* part is available for the application firmware.
 
 ## Boot flow
 
-The bootloader is the first piece of software that is running on the PineTime. It's main goal is to load the application firmware. It is also responsible to swap the firmware from the secondary and primary slot if a newer version of the firmware is present in the secondary slot. It also provides the possibility to revert to the previous version of the firmware and to restore a recovery firmware that supports OTA.
+The bootloader is the first piece of software that is running on the PineTime. Its main goal is to load the application firmware. It is also responsible to swap the firmware from the secondary and primary slot if a newer version of the firmware is present in the secondary slot. It also provides the possibility to revert to the previous version of the firmware and to restore a recovery firmware that supports OTA.
 
 ![Boot flow](docs/pictures/workflow.png "Boot flow")
 
