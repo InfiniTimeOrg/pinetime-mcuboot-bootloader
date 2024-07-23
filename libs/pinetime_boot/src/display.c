@@ -35,6 +35,7 @@
 #define DISPLAY_CS   25  //  LCD_CS (P0.25): Chip select
 #define DISPLAY_DC   18  //  LCD_RS (P0.18): Clock/data pin (CD)
 #define DISPLAY_RST  26  //  LCD_RESET (P0.26): Display reset
+#define DISPLAY_LOW 14  //  LCD_BACKLIGHT_{LOW,MID,HIGH} (P0.14, 22, 23): Backlight (active low)
 #define DISPLAY_HIGH 23  //  LCD_BACKLIGHT_{LOW,MID,HIGH} (P0.14, 22, 23): Backlight (active low)
 #define BATCH_SIZE  256  //  Max number of SPI data bytes to be transmitted
 #define PUSH_BUTTON_IN  13  //  GPIO Pin P0.13: PUSH BUTTON_IN
@@ -215,7 +216,7 @@ static int init_display(void) {
     rc = hal_gpio_init_out(DISPLAY_CS, 1); assert(rc == 0);
     rc = hal_gpio_init_out(DISPLAY_DC, 0); assert(rc == 0);
     //  Switch on backlight
-    rc = hal_gpio_init_out(DISPLAY_HIGH, 0); assert(rc == 0);
+    rc = hal_gpio_init_out(DISPLAY_LOW, 0); assert(rc == 0);
 
     hard_reset();
     write_command(SWRESET, NULL, 0);
