@@ -1,0 +1,42 @@
+Subject: [PATCH] spi chip update
+---
+Index: hw/drivers/flash/spiflash/chips/syscfg.yml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/hw/drivers/flash/spiflash/chips/syscfg.yml b/hw/drivers/flash/spiflash/chips/syscfg.yml
+--- a/hw/drivers/flash/spiflash/chips/syscfg.yml
++++ b/hw/drivers/flash/spiflash/chips/syscfg.yml
+@@ -491,3 +491,9 @@
+     SPIFLASH_EON2580B:
+         description: Add support for EON2580B
+         value: 0
++    SPIFLASH_XTX25F32B:
++        description: Add support for XTX25F32B
++        value: 1
++    SPIFLASH_BY25Q32:
++        description: Add support for BY25Q32
++        value: 1
+Index: hw/drivers/flash/spiflash/src/spiflash.c
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/hw/drivers/flash/spiflash/src/spiflash.c b/hw/drivers/flash/spiflash/src/spiflash.c
+--- a/hw/drivers/flash/spiflash/src/spiflash.c
++++ b/hw/drivers/flash/spiflash/src/spiflash.c
+@@ -565,7 +565,12 @@
+ #if MYNEWT_VAL(SPIFLASH_EON2580B)
+     EON_CHIP(EN80B, 0x30, FLASH_CAPACITY_8MBIT),
+ #endif
+-
++#if MYNEWT_VAL(SPIFLASH_XTX25F32B)
++    STD_FLASH_CHIP("", 0x0b, 0x40, 0x16, spiflash_release_power_down_generic),
++#endif
++#if MYNEWT_VAL(SPIFLASH_BY25Q32)
++    STD_FLASH_CHIP("", 0x16, 0x40, 0x16, spiflash_release_power_down_generic),
++#endif
+     { {0} },
+ };
+

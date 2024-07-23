@@ -54,17 +54,18 @@ syscfg.vals:
 
     ###########################################################################
     # SPI Flash
-    # XTX XT25F32B 32 Mb (4 MB) SPI NOR Flash (similar to QuadSPI SPI NOR Flash like Macronix 32 Mb (4 MB) MX25L3233F)
-    # manufacturer (0x0b), device (0x15), memory type (0x40), density (0x16)
+    #  - XTX XT25F32B 32 Mb (4 MB) SPI NOR Flash (similar to QuadSPI SPI NOR Flash like Macronix 32 Mb (4 MB) MX25L3233F)
+    #    manufacturer (0x0b), device (0x15), memory type (0x40), density (0x16)
+    # - BY25Q32 : manufacturer (0x68), memory type (0x40), density (0x16)
     # Settings below are documented at https://github.com/apache/mynewt-core/blob/master/hw/drivers/flash/spiflash/syscfg.yml
 
     SPIFLASH:               1   # Enable SPI Flash
     SPIFLASH_SPI_NUM:       0   # SPI Interface 0
     SPIFLASH_SPI_CS_PIN:    5   # SPI interface CS pin: P0.05/AIN3, SPI-CE# (SPI-NOR)
     SPIFLASH_BAUDRATE:      8000    # Requested baudrate, 8000 is the fastest baudrate supported by nRF52832
-    SPIFLASH_MANUFACTURER:  0x0B    # Expected SpiFlash manufacturer as read by Read JEDEC ID command 9FH
-    SPIFLASH_MEMORY_TYPE:   0x40    # Expected SpiFlash memory type as read by Read JEDEC ID command 9FH
-    SPIFLASH_MEMORY_CAPACITY: 0x16  # Expected SpiFlash memory capactity as read by Read JEDEC ID command 9FH (2 ^ 0x16 = 32 Mb)
+    SPIFLASH_MANUFACTURER:  0    # Expected SpiFlash manufacturer as read by Read JEDEC ID command 9FH. Set to 0 to support multiple chips at once
+    SPIFLASH_MEMORY_TYPE:   0    # Expected SpiFlash memory type as read by Read JEDEC ID command 9FH. Set to 0 to support multiple chips at once
+    SPIFLASH_MEMORY_CAPACITY: 0  # Expected SpiFlash memory capactity as read by Read JEDEC ID command 9FH (2 ^ 0x16 = 32 Mb). Set to 0 to support multiple chips at once
     SPIFLASH_SECTOR_COUNT:  1024    # Number of sectors: 1024 sectors of 4 KB each
     SPIFLASH_SECTOR_SIZE:   4096    # TODO Number of bytes that can be erased at a time: 4 KB sector size
     SPIFLASH_PAGE_SIZE:     256     # TODO Number of bytes that can be written at a time

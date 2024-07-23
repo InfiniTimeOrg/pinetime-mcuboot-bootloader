@@ -9,6 +9,20 @@ source paths.bash
 #  Show the Arm Toolchain version.
 arm-none-eabi-gcc --version
 
+#  Apply patches
+set +e
+patch -uN -p1 --dry-run --silent -d repos/apache-mynewt-core/ < libs/pinetime_boot/patches/01-spiflash.patch 2>/dev/null
+
+#If the patch has not been applied then the $? which is the exit status
+#for last command would have a success status code = 0
+if [ $? -eq 0 ];
+then
+    #apply the patch
+    patch -uN -p1 -d repos/apache-mynewt-core/ < libs/pinetime_boot/patches/01-spiflash.patch
+fi
+set -e
+
+
 #  Build the bootloader.
 newt build nrf52_boot
 
