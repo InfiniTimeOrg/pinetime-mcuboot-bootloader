@@ -85,4 +85,6 @@ The goal of this firmware is to provide a mean for the user to OTA a new firmwar
 
 This project is based on MyNEWT RTOS and MCUBoot bootloader. The specific code for the PineTime is located in `libs/pinetime_boot`.
 
+# Patches
 
+ - [01-spiflash.patch](libs/pinetime_boot/patches/01-spiflash.patch) - July 2024 : Add support for the new SPI Flash memory chip (BY25Q32) into the `spiflash` driver of MyNewt. See [this issue](https://github.com/InfiniTimeOrg/pinetime-mcuboot-bootloader/issues/11) for more information.
