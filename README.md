@@ -76,6 +76,7 @@ The goal of this firmware is to provide a mean for the user to OTA a new firmwar
 ## How to build
 
 - Install `newt` tool
+- Install Python modules `adafruit-nrfutil` and `cbor`
 - Clone the project and `cd` into it
 - Init and update submodules : `git submodule update --init --recursive`
 - Configure mynewt : `newt upgrade`

@@ -224,8 +224,6 @@ static int init_display(void) {
     hard_reset();
     write_command(SWRESET, NULL, 0);
     pinetime_delay_ms(200);
-    write_command(SLPOUT, NULL, 0);
-    pinetime_delay_ms(200);
 
     static const uint8_t FRMCTR1_PARA[] = { 0x01, 0x2C, 0x2D };
     write_command(FRMCTR1, FRMCTR1_PARA, sizeof(FRMCTR1_PARA));
@@ -271,6 +269,9 @@ static int init_display(void) {
     }
     static const uint8_t COLMOD_PARA[] = { 0x05 };
     write_command(COLMOD, COLMOD_PARA, sizeof(COLMOD_PARA));
+
+    write_command(SLPOUT, NULL, 0);
+    pinetime_delay_ms(200);
 
     write_command(DISPON, NULL, 0);
     pinetime_delay_ms(200);
