@@ -35,7 +35,7 @@ diff --git a/hw/drivers/flash/spiflash/src/spiflash.c b/hw/drivers/flash/spiflas
 +    STD_FLASH_CHIP("", 0x0b, 0x40, 0x16, spiflash_release_power_down_generic),
 +#endif
 +#if MYNEWT_VAL(SPIFLASH_BY25Q32)
-+    STD_FLASH_CHIP("", 0x16, 0x40, 0x16, spiflash_release_power_down_generic),
++    STD_FLASH_CHIP("", 0x68, 0x40, 0x16, spiflash_release_power_down_generic),
 +#endif
      { {0} },
  };
